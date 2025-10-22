@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761122247767,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_Education",
+      "version": "latest"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/components/views/UV_Education.tsx",
+      "type": "text",
+      "size": 8739,
+      "dependencies": false
+    }
+  ]
+}

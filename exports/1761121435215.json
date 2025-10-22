@@ -1,0 +1,15 @@
+{
+  "timestamp": 1761121435215,
+  "operation": {
+    "id": "backend:server:main"
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/backend/server.ts",
+      "type": "text",
+      "size": 31912,
+      "dependencies": false
+    }
+  ]
+}

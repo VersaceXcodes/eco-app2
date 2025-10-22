@@ -1,0 +1,15 @@
+{
+  "timestamp": 1761121325041,
+  "operation": {
+    "id": "db:postgres"
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/backend/db.sql",
+      "type": "text",
+      "size": 271,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761121736776,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_PrivacyPolicy",
+      "version": "latest"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/components/views/UV_PrivacyPolicy.tsx",
+      "type": "text",
+      "size": 1717,
+      "dependencies": false
+    }
+  ]
+}

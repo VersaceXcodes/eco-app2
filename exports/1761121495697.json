@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761121495697,
+  "operation": {
+    "id": "webapp:react:store",
+    "refs": {
+      "id": "redux",
+      "version": "1761121463940"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/store/main.tsx",
+      "type": "text",
+      "size": 7347,
+      "dependencies": false
+    }
+  ]
+}

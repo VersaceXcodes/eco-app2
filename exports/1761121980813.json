@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761121980813,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_ProfileCustomization",
+      "version": "latest"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/components/views/UV_ProfileCustomization.tsx",
+      "type": "text",
+      "size": 8432,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,586 @@
+openapi: 3.0.0
+info:
+  title: EcoTrack API
+  description: User-facing API for EcoTrack, enabling environmental impact
+    tracking, community engagement, and education.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - password
+        - created_at
+        - is_active
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+        name:
+          type: string
+        location:
+          type: string
+        eco_goals:
+          type: array
+          items:
+            type: string
+        impact_score:
+          type: integer
+        achievements:
+          type: array
+          items:
+            type: string
+        challenges:
+          type: array
+          items:
+            type: string
+        reports:
+          type: array
+          items:
+            type: string
+    Challenge:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - start_date
+        - end_date
+        - goal
+        - participants
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        goal:
+          type: integer
+        participants:
+          type: array
+          items:
+            type: string
+            ref: "#/components/schemas/User"
+    Activity:
+      type: object
+      required:
+        - id
+        - user_id
+        - action_type
+        - timestamp
+        - impact_points
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        action_type:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        impact_points:
+          type: integer
+    IssueReport:
+      type: object
+      required:
+        - id
+        - user_id
+        - location
+        - description
+        - media_url
+        - status
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        media_url:
+          type: string
+        status:
+          type: string
+    ProfileGoal:
+      type: object
+      required:
+        - id
+        - user_id
+        - goal_description
+        - target_value
+        - deadline
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        goal_description:
+          type: string
+        target_value:
+          type: integer
+        deadline:
+          type: string
+          format: date-time
+  parameters:
+    location:
+      in: query
+      required: false
+      schema:
+        type: string
+    project_type:
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - cleanup
+          - tree_planting
+          - education
+          - awareness
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /users:
+    post:
+      summary: Register new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - name
+                - location
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                name:
+                  type: string
+                location:
+                  type: string
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid data
+  /users/{user_id}:
+    get:
+      summary: Get user profile
+      operationId: getUserProfile
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+    patch:
+      summary: Update user profile
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                location:
+                  type: string
+                eco_goals:
+                  type: array
+                  items:
+                    type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid data
+  /auth/login:
+    post:
+      summary: Authenticate user
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Authenticated with token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current_user:
+                    $ref: "#/components/schemas/User"
+                  auth_token:
+                    type: string
+        "401":
+          description: Invalid credentials
+  /auth/signup:
+    post:
+      summary: Register new user (same as /users)
+      operationId: registerUser
+  /activities:
+    post:
+      summary: Log eco-action
+      operationId: logActivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - action_type
+                - impact_points
+              properties:
+                user_id:
+                  type: string
+                action_type:
+                  type: string
+                impact_points:
+                  type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Activity created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+        "400":
+          description: Invalid data
+  /challenges:
+    get:
+      summary: List all challenges
+      operationId: listChallenges
+      parameters:
+        - in: query
+          name: location
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: project_type
+          required: false
+          schema:
+            type: string
+            enum:
+              - cleanup
+              - tree_planting
+              - education
+              - awareness
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Challenge list
+          content:
+            application/json:
+              items:
+                $ref: "#/components/schemas/Challenge"
+        "400":
+          description: Invalid filters
+    post:
+      summary: Create challenge
+      operationId: createChallenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Challenge"
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Challenge created
+          content:
+            application/json:
+              $ref: "#/components/schemas/Challenge"
+        "400":
+          description: Invalid data
+    patch:
+      summary: Update challenge
+      operationId: updateChallenge
+      parameters:
+        - in: path
+          name: challenge_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Challenge"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Challenge updated
+          content:
+            application/json:
+              $ref: "#/components/schemas/Challenge"
+        "400":
+          description: Invalid data
+    delete:
+      summary: Delete challenge
+      operationId: deleteChallenge
+      parameters:
+        - in: path
+          name: challenge_id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Challenge deleted
+  /challenges/{challenge_id}:
+    get:
+      summary: Get specific challenge
+      operationId: getChallenge
+      parameters:
+        - in: path
+          name: challenge_id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Challenge details
+          content:
+            application/json:
+              $ref: "#/components/schemas/Challenge"
+  /issue-reports:
+    post:
+      summary: Submit environmental report
+      operationId: submitReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueReport"
+              properties:
+                status:
+                  enum:
+                    - pending
+                    - verified
+                    - rejected
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Report created
+          content:
+            application/json:
+              $ref: "#/components/schemas/IssueReport"
+        "400":
+          description: Missing media or location
+  /issue-reports/{report_id}:
+    get:
+      summary: View report details
+      operationId: getReport
+      parameters:
+        - in: path
+          name: report_id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Report details
+          content:
+            application/json:
+              $ref: "#/components/schemas/IssueReport"
+        "404":
+          description: Report not found
+  /dashboard:
+    get:
+      summary: User impact dashboard
+      operationId: getDashboard
+      parameters:
+        - in: query
+          name: time_range
+          required: false
+          schema:
+            type: string
+            enum:
+              - today
+              - this_week
+              - this_month
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  impact_score: integer
+                  achievements: array
+  /education:
+    get:
+      summary: List educational content
+      operationId: listEducation
+      parameters:
+        - in: query
+          name: category
+          required: false
+          schema:
+            type: string
+            enum:
+              - climate
+              - waste
+              - biodiversity
+        - in: query
+          name: level
+          required: false
+          schema:
+            type: string
+            enum:
+              - beginner
+              - expert
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Educational resources
+          content:
+            application/json:
+              items:
+                type: object
+                properties:
+                  id: string
+                  title: string
+                  content: string
+  /profile:
+    get:
+      summary: User profile summary
+      operationId: getProfileSummary
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Profile summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eco_goals: array
+                  impact_score: integer
+  /marketplace:
+    get:
+      summary: Browse eco-products
+      operationId: listProducts
+      parameters:
+        - in: query
+          name: product_category
+          required: false
+          schema:
+            type: string
+            enum:
+              - reusable
+              - eco_brands
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Products list
+          content:
+            application/json:
+              items:
+                type: object
+                properties:
+                  id: string
+                  name: string
+                  brand: string
+                  impact: integer
+security:
+  - bearerAuth: []

@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761121951084,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_Registration",
+      "version": "1761121865658"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/components/views/UV_Registration.tsx",
+      "type": "text",
+      "size": 8178,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761121817760,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "GV_SideNav",
+      "version": "1761121703456"
+    }
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/vitereact/src/components/views/GV_SideNav.tsx",
+      "type": "text",
+      "size": 5179,
+      "dependencies": false
+    }
+  ]
+}

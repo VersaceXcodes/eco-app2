@@ -1,0 +1,290 @@
+asyncapi: 2.0.0
+info:
+  title: EcoTrack Real-time Events
+  version: 1.0.0
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - password
+        - created_at
+        - is_active
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+        name:
+          type: string
+        location:
+          type: string
+    Challenge:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - start_date
+        - end_date
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        participants:
+          type: array
+          items:
+            type: string
+    IssueReport:
+      type: object
+      required:
+        - id
+        - user_id
+        - location
+        - description
+        - media_urls
+        - verified
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        media_urls:
+          type: array
+          items:
+            type: string
+        verified:
+          type: boolean
+        status:
+          type: string
+    ActivityLog:
+      type: object
+      required:
+        - id
+        - user_id
+        - action_type
+        - impact_score
+        - timestamp
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        action_type:
+          type: string
+        impact_score:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+    ForumPost:
+      type: object
+      required:
+        - id
+        - user_id
+        - content
+        - timestamp
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        content:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    ProfileUpdate:
+      type: object
+      required:
+        - user_id
+        - updated_fields
+      properties:
+        user_id:
+          type: string
+        updated_fields:
+          type: array
+          items:
+            type: string
+events:
+  authenticationUpdated:
+    description: Emitted when user authentication state changes
+    parameters:
+      type: object
+      properties:
+        current_user:
+          $ref: "#/components/schemas/User"
+        auth_token:
+          type: string
+        authentication_status:
+          type: object
+          properties:
+            is_authenticated:
+              type: boolean
+            is_loading:
+              type: boolean
+        error_message:
+          type: string
+  activityLogged:
+    description: Emitted when user logs an eco-action
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        action_type:
+          type: string
+        impact_score:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+  challengeJoined:
+    description: Emitted when user joins a challenge
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        challenge_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+  challengeUpdated:
+    description: Emitted when challenge details or participants change
+    parameters:
+      type: object
+      properties:
+        challenge_id:
+          type: string
+        participants:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+  reportSubmitted:
+    description: Emitted when user submits an environmental issue report
+    parameters:
+      type: object
+      properties:
+        report_id:
+          type: string
+        user_id:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        media_urls:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+  reportVerified:
+    description: Emitted when report verification status changes
+    parameters:
+      type: object
+      properties:
+        report_id:
+          type: string
+        verified:
+          type: boolean
+        verification_timestamp:
+          type: string
+          format: date-time
+  profileUpdated:
+    description: Emitted when user profile is updated
+    parameters:
+      type: object
+      $ref: "#/components/schemas/ProfileUpdate"
+  forumPostCreated:
+    description: Emitted when user creates a forum post
+    parameters:
+      type: object
+      $ref: "#/components/schemas/ForumPost"
+  challengeProgressUpdated:
+    description: Emitted when user updates progress in a challenge
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        challenge_id:
+          type: string
+        progress:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+  locationUpdated:
+    description: Emitted when user's location changes
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        location:
+          type: string
+  challengeExited:
+    description: Emitted when user leaves a challenge
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        challenge_id:
+          type: string
+  impactDashboardUpdated:
+    description: Emitted when dashboard metrics need updating
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        total_impact:
+          type: number
+        recent_actions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityLog"
+  marketplacePurchase:
+    description: Emitted when user makes an eco-product purchase (optional MVP)
+    parameters:
+      type: object
+      properties:
+        user_id:
+          type: string
+        product_id:
+          type: string
+        purchase_date:
+          type: string
+          format: date-time
+        impact:
+          type: number

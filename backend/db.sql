@@ -1,0 +1,2 @@
+-- ERROR: Insufficient information provided. The DRD (Database Requirements Document) and DB schemas are empty or undefined. 
+-- Please provide the actual table structures, column definitions, relationships, and seeding requirements to generate valid PostgreSQL commands.

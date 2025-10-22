@@ -1,0 +1,21 @@
+{
+  "timestamp": 1761121463181,
+  "operation": {
+    "id": "settings:config:package"
+  },
+  "projectId": "eco-app2",
+  "files": [
+    {
+      "path": "/mnt/data/eco-app2/backend/package.json",
+      "type": "text",
+      "size": 1425,
+      "dependencies": true
+    },
+    {
+      "path": "/mnt/data/eco-app2/backend/.env",
+      "type": "text",
+      "size": 235,
+      "dependencies": false
+    }
+  ]
+}
